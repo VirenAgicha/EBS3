@@ -12,8 +12,7 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'hthththththt'
     DATABASE_URL = f"mysql+pymysql://admin:12345678@cclmpr.cenrv2a3hx41.ap-south-1.rds.amazonaws.com:3306/{DB_NAME}"
-    app.config[
-        'SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
+    app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
     db.init_app(app)
 
     from .views import views
@@ -24,8 +23,8 @@ def create_app():
 
     #from .models import user
     from .models import User, Note
-
-    create_database(app)
+    with app.app_context():
+        db.create_all()
 
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
