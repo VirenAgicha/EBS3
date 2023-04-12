@@ -1,0 +1,53 @@
+{% extends "base.html"%}    <title>{% block title %}Home{% endblock %}</title>
+    
+{% block content %}
+<h1 align = "center">Notes</h1>
+<ul class = "lost-group list-group-flush" id = "notes">
+    {% for note in user.notes %}
+    <l1 class = "list-group-item">{{ note.data }}
+        <button type = "button" class = "close" onClick = "deleteNote({{ note.id }})">
+            <span aria-hidden = "true">&times;</span>
+        </button>
+    </li>
+    {% endfor %}
+</ul>
+<form action="/" method = "POST">
+    <textarea name = "note" id = "note" class = "form-control"></textarea><br>
+    <div align = "center">
+        <button type = "submit" class = "btn btn-primary">Add Note</button>
+    </div>
+</form>
+
+<h1 style="text-align: center;">My To-Do List</h1>
+    <table style="text-align: center;">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Task </th>
+                <th>Done </th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in user.tasks %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.task }}</td>
+                <td>{% if item.done %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <form action="/done/{{ item.id }}" method="POST">
+                        <button style="height:30px;width:65px;" {% if item.done %} disabled{% endif %}>Done</button>
+                    </form>
+                    <form action="/cancel/{{ item.id }}" method="POST">
+                        <button style="height:30px;width:65px;">Cancel</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <form action="/add" method="POST" style="text-align: center;">
+        <input type="text" name="task" id = "task" class = "form-control" required>
+        <button type = "submit" class = "btn btn-primary">Add Task</button>
+    </form>
+{% endblock %}
